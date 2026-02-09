@@ -1,0 +1,27 @@
+{
+    "name": "acemindua/ace-admin-package",
+    "description": "Admin panel for Laravel with Vue 3",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Your Name"
+        }
+    ],
+    "require": {
+        "php": "^8.2",
+        "illuminate/support": "^11.0|^12.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Ace\\Admin\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Ace\\Admin\\AdminServiceProvider"
+            ]
+        }
+    }
+}
