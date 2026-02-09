@@ -9,6 +9,9 @@ class AdminServiceProvider extends ServiceProvider
     public function register(): void {}
     public function boot(): void
     {
+        // ОЦЕЙ РЯДОК ВИРІШУЄ ПОМИЛКУ "No hint path defined"
+        $this->loadViewsFrom(__DIR__ . '/../resources/views', 'ace-admin');
+
         // 1. Реєструємо команду
         if ($this->app->runningInConsole()) {
             $this->commands([
@@ -16,7 +19,6 @@ class AdminServiceProvider extends ServiceProvider
             ]);
 
             // 2. Реєструємо ПУБЛІКАЦІЮ асетів
-            // Важливо: перевір, чи папка resources/js реально існує в пакеті!
             $this->publishes([
                 __DIR__ . '/../resources/js' => resource_path('js/vendor/ace-admin'),
             ], 'ace-admin-assets');
