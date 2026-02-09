@@ -1,36 +1,25 @@
-<script setup>
-import AppLayout from "../Layouts/AppLayout.vue";
-import Sidebar from "../Components/Sidebar.vue";
-</script>
-
 <template>
-  <AppLayout>
-    <template #sidebar>
-      <Sidebar />
-    </template>
-
-    <template #header>
-      <header class="top-header">Панель керування</header>
-    </template>
-
-    <div class="card">
-      <h1>Ласкаво просимо!</h1>
-      <p>Це ваш автономний шаблон адмінки на Vue-компонентах.</p>
+  <div class="ace-flex ace-min-h-screen ace-bg-gray-100">
+    <div class="ace-w-64 ace-bg-slate-900 ace-text-white ace-p-6">
+      <h1 class="ace-text-2xl ace-font-bold ace-text-indigo-400">Ace Admin</h1>
+      <nav class="ace-mt-10">
+        <a
+          href="#"
+          class="ace-block ace-py-2 ace-px-4 ace-rounded ace-hover:bg-slate-800"
+          >📊 Dashboard</a
+        >
+      </nav>
     </div>
-  </AppLayout>
-</template>
 
-<style scoped>
-.top-header {
-  background: white;
-  padding: 1rem 2rem;
-  border-bottom: 1px solid #e5e7eb;
-  font-weight: 600;
-}
-.card {
-  background: white;
-  padding: 2rem;
-  border-radius: 0.75rem;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-}
-</style>
+    <div class="ace-flex-1 ace-p-10">
+      <div class="ace-bg-white ace-rounded-xl ace-shadow-sm ace-p-8">
+        <h2 class="ace-text-xl ace-font-semibold ace-text-gray-800">
+          Ace Admin працює з Tailwind!
+        </h2>
+        <p class="ace-mt-2 ace-text-gray-600">
+          Ці стилі ізольовані префіксом 'ace-'.
+        </p>
+      </div>
+    </div>
+  </div>
+</template>

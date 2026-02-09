@@ -7,24 +7,25 @@ use Illuminate\Support\ServiceProvider;
 class AdminServiceProvider extends ServiceProvider
 {
     public function register(): void {}
+
     public function boot(): void
     {
-        // ОЦЕЙ РЯДОК ВИРІШУЄ ПОМИЛКУ "No hint path defined"
         $this->loadViewsFrom(__DIR__ . '/../resources/views', 'ace-admin');
+        $this->loadRoutesFrom(__DIR__ . '/../routes/web.php');
 
-        // 1. Реєструємо команду
         if ($this->app->runningInConsole()) {
             $this->commands([
                 \Ace\Admin\Console\Commands\InstallCommand::class,
             ]);
 
-            // 2. Реєструємо ПУБЛІКАЦІЮ асетів
+            // Обчислюємо шлях до кореня пакета, де лежить dist
+            // __DIR__ - це src/
+            // dirname(__DIR__) - це корінь пакета
+            $distPath = dirname(__DIR__) . '/dist';
+
             $this->publishes([
-                __DIR__ . '/../resources/js' => resource_path('js/vendor/ace-admin'),
+                $distPath => public_path('vendor/ace-admin'),
             ], 'ace-admin-assets');
         }
-
-        // 3. Завантажуємо роути
-        $this->loadRoutesFrom(__DIR__ . '/../routes/web.php');
     }
 }

@@ -1,28 +1,31 @@
 import { defineConfig } from "vite";
 import vue from "@vitejs/plugin-vue";
+import path from "path";
 
 export default defineConfig({
-  plugins: [
-    vue({
-      template: {
-        compilerOptions: {
-          isCustomElement: (tag) => tag.startsWith("ace-"),
-        },
-      },
-    }),
-  ],
+  plugins: [vue()],
   resolve: {
     alias: {
-      vue: "vue/dist/vue.esm-browser.js", // Важливо для використання template: ""
+      // Якщо ти використовуєш .vue файли (SFC), есмі-браузер не обов'язковий,
+      // але хай буде для сумісності
+      vue: "vue/dist/vue.esm-browser.js",
     },
   },
   build: {
-    lib: {
-      entry: "resources/js/app.js",
-      formats: ["iife"], // Формат, що працює просто через <script>
-      name: "AceAdmin",
-      fileName: () => "ace-admin.js",
+    rollupOptions: {
+      // Точка входу — твій JS, який імпортує CSS
+      input: path.resolve(__dirname, "resources/js/app.js"),
+      output: {
+        // Фіксована назва для JS
+        entryFileNames: "app.js",
+        // Фіксована назва для CSS
+        assetFileNames: (assetInfo) => {
+          if (assetInfo.name === "style.css") return "app.css";
+          return assetInfo.name;
+        },
+      },
     },
     outDir: "dist",
+    emptyOutDir: true,
   },
 });

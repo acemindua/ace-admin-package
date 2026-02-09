@@ -30,14 +30,14 @@ class InstallCommand extends Command
     protected function publishCompiledJs()
     {
         // Шлях до зібраного файлу всередині пакета (у vendor)
-        $sourcePath = base_path('vendor/acemindua/ace-admin-package/dist/ace-admin.js');
+        $sourcePath = base_path('vendor/acemindua/ace-admin-package/dist/app.js');
 
         // Шлях призначення у публічній папці проекта market
         $publicPath = public_path('vendor/ace-admin');
-        $destinationPath = $publicPath . '/ace-admin.js';
+        $destinationPath = $publicPath . '/app.js';
 
         if (!File::exists($sourcePath)) {
-            $this->error('❌ Помилка: Зібраний файл ace-admin.js не знайдено у vendor. Переконайтеся, що ви зробили "npm run build" перед пушем пакета.');
+            $this->error('❌ Помилка: Зібраний файл app.js не знайдено у vendor. Переконайтеся, що ви зробили "npm run build" перед пушем пакета.');
             return;
         }
 
@@ -46,6 +46,6 @@ class InstallCommand extends Command
         }
 
         File::copy($sourcePath, $destinationPath);
-        $this->info('📦 Автономний JS скопійовано у public/vendor/ace-admin/ace-admin.js');
+        $this->info('📦 Автономний JS скопійовано у public/vendor/ace-admin/app.js');
     }
 }
