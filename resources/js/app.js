@@ -1,8 +1,5 @@
 import { createApp } from "vue";
-const app = createApp({
-  data() {
-    return { message: "Ace Admin працює!" };
-  },
-  template: "<h1>{{ message }}</h1>",
-});
+import Dashboard from "./Pages/Dashboard.vue";
+
+const app = createApp(Dashboard);
 app.mount("#admin-root");
