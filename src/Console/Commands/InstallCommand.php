@@ -6,7 +6,6 @@ use Illuminate\Console\Command;
 
 class InstallCommand extends Command
 {
-    // Це ім'я команди, яке ти викликаєш у composer.json
     protected $signature = 'ace-admin:install';
     protected $description = 'Install Ace Admin Package';
 
@@ -16,46 +15,35 @@ class InstallCommand extends Command
 
         $this->setupViteAlias();
 
-        // У методі handle() додаємо:
+        // Викликаємо публікацію, яку ми опишемо в Провайдері
         $this->call('vendor:publish', [
             '--provider' => "Ace\Admin\AdminServiceProvider",
-            '--tag' => "ace-admin-assets"
+            '--tag' => "ace-admin-assets",
+            '--force' => true
         ]);
 
-        if ($this->app->runningInConsole()) {
-            $this->publishes([
-                __DIR__ . '/../resources/js' => resource_path('js/vendor/ace-admin'),
-            ], 'ace-admin-assets');
-        }
+        $this->info('Ace Admin успішно налаштовано!');
     }
 
     protected function setupViteAlias()
     {
         $viteConfigPath = base_path('vite.config.js');
-
-        if (!file_exists($viteConfigPath)) {
-            $this->warn('vite.config.js не знайдено. Будь ласка, додайте alias вручну.');
-            return;
-        }
+        if (!file_exists($viteConfigPath)) return;
 
         $currentConfig = file_get_contents($viteConfigPath);
-        $alias = "'@AceAdmin': 'vendor/acemindua/ace-admin-package/resources/js'";
 
-        // Перевіряємо, чи alias вже існує
         if (str_contains($currentConfig, '@AceAdmin')) {
-            $this->info('Alias @AceAdmin вже існує у vite.config.js');
+            $this->info('Alias @AceAdmin вже існує.');
             return;
         }
 
-        // Шукаємо секцію alias: { і вставляємо туди наш рядок
+        // Покращений паттерн для пошуку секції alias
         $pattern = '/alias:\s*\{/';
         if (preg_match($pattern, $currentConfig)) {
-            $replacement = "alias: {\n            $alias,";
-            $newConfig = preg_replace($pattern, $replacement, $currentConfig);
+            $alias = "\n            '@AceAdmin': 'vendor/acemindua/ace-admin-package/resources/js',";
+            $newConfig = preg_replace($pattern, "alias: {{$alias}", $currentConfig);
             file_put_contents($viteConfigPath, $newConfig);
             $this->info('Alias додано у vite.config.js');
-        } else {
-            $this->error('Не вдалося знайти секцію alias у vite.config.js. Додайте її вручну.');
         }
     }
 }
