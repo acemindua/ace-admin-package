@@ -10,6 +10,11 @@ class DashboardController extends Controller
 {
     public function index(): Response
     {
-        return Inertia::render('@AceAdmin/Pages/Dashboard');
+        // Вказуємо Inertia використовувати наш специфічний шаблон
+        Inertia::setRootView('ace-admin::app');
+
+        return Inertia::render('@AceAdmin/Pages/Dashboard', [
+            'message' => 'Ласкаво просимо в адмінку!'
+        ]);
     }
 }
