@@ -3,12 +3,13 @@
 namespace Ace\Admin\Http\Controllers;
 
 use Illuminate\Routing\Controller;
+use Inertia\Inertia;
+use Inertia\Response;
 
 class DashboardController extends Controller
 {
-    public function index()
+    public function index(): Response
     {
-        // Поки що просто повернемо текст, щоб перевірити зв'язок
-        return "Вітаємо в Ace Admin Panel! Пакет працює.";
+        return Inertia::render('@AceAdmin/Pages/Dashboard');
     }
 }
