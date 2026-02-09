@@ -1,20 +1,14 @@
 <!DOCTYPE html>
-<html lang="uk">
+<html>
 
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Ace Admin Panel</title>
-
-    @routes
-
-    @vite(['resources/js/app.js'], 'vendor/ace-admin')
-
-    @inertiaHead
+    <title>Ace Admin</title>
 </head>
 
-<body class="font-sans antialiased">
-    @inertia
+<body>
+    <div id="admin-root"></div>
+
+    <script src="{{ asset('vendor/ace-admin/ace-admin.js') }}"></script>
 </body>
 
 </html>

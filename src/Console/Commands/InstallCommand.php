@@ -3,47 +3,49 @@
 namespace Ace\Admin\Console\Commands;
 
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\File;
 
 class InstallCommand extends Command
 {
     protected $signature = 'ace-admin:install';
-    protected $description = 'Install Ace Admin Package';
+    protected $description = 'Встановлення асетів Ace Admin';
 
     public function handle()
     {
-        $this->info('Встановлення Ace Admin...');
+        $this->info('🚀 Початок встановлення Ace Admin...');
 
-        $this->setupViteAlias();
-
-        // Викликаємо публікацію, яку ми опишемо в Провайдері
+        // 1. Публікуємо ресурси через Провайдер (якщо там налаштована публікація)
         $this->call('vendor:publish', [
             '--provider' => "Ace\Admin\AdminServiceProvider",
             '--tag' => "ace-admin-assets",
             '--force' => true
         ]);
 
-        $this->info('Ace Admin успішно налаштовано!');
+        // 2. Копіюємо зібраний JS з dist пакета в public проекта
+        $this->publishCompiledJs();
+
+        $this->info('✅ Ace Admin успішно налаштовано!');
     }
 
-    protected function setupViteAlias()
+    protected function publishCompiledJs()
     {
-        $viteConfigPath = base_path('vite.config.js');
-        if (!file_exists($viteConfigPath)) return;
+        // Шлях до зібраного файлу всередині пакета (у vendor)
+        $sourcePath = base_path('vendor/acemindua/ace-admin-package/dist/ace-admin.js');
 
-        $currentConfig = file_get_contents($viteConfigPath);
+        // Шлях призначення у публічній папці проекта market
+        $publicPath = public_path('vendor/ace-admin');
+        $destinationPath = $publicPath . '/ace-admin.js';
 
-        if (str_contains($currentConfig, '@AceAdmin')) {
-            $this->info('Alias @AceAdmin вже існує.');
+        if (!File::exists($sourcePath)) {
+            $this->error('❌ Помилка: Зібраний файл ace-admin.js не знайдено у vendor. Переконайтеся, що ви зробили "npm run build" перед пушем пакета.');
             return;
         }
 
-        // Покращений паттерн для пошуку секції alias
-        $pattern = '/alias:\s*\{/';
-        if (preg_match($pattern, $currentConfig)) {
-            $alias = "\n            '@AceAdmin': 'vendor/acemindua/ace-admin-package/resources/js',";
-            $newConfig = preg_replace($pattern, "alias: {{$alias}", $currentConfig);
-            file_put_contents($viteConfigPath, $newConfig);
-            $this->info('Alias додано у vite.config.js');
+        if (!File::isDirectory($publicPath)) {
+            File::makeDirectory($publicPath, 0755, true);
         }
+
+        File::copy($sourcePath, $destinationPath);
+        $this->info('📦 Автономний JS скопійовано у public/vendor/ace-admin/ace-admin.js');
     }
 }
